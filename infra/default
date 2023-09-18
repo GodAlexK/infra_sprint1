@@ -1,1 +1,93 @@
-/etc/nginx/sites-available/default
+server {
+    server_name 51.250.16.6 taskibest.webhop.me;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:8000;
+
+    }
+
+    location /admin/ {
+        proxy_pass http://127.0.0.1:8000;
+
+    }
+
+    location / {
+        root   /var/www/taski;
+        index  index.html index.htm;
+        try_files $uri /index.html;
+    }
+
+    location /sentry-debug/ {
+        proxy_pass http://127.0.0.1:8000;
+    }
+
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/taskibest.webhop.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/taskibest.webhop.me/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+}
+server {
+    if ($host = taskibest.webhop.me) {
+        return 301 https://$host$request_uri;
+    }
+
+    listen 80;
+    server_name 51.250.16.6 taskibest.webhop.me;
+    return 404;
+}
+
+
+#kittygram
+server {
+    server_name 51.250.16.6 kittygrambest.ddns.net;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:8080;
+        client_max_body_size 20M;
+    }
+
+    location /admin/ {
+        proxy_pass http://127.0.0.1:8080;
+        client_max_body_size 20M;
+
+    }
+
+    location /media/ {
+        alias /var/www/kittygram/media/;
+    }
+
+    location / {
+        root /var/www/kittygram;
+        index  index.html index.htm;
+        try_files $uri /index.html;
+    }
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/kittygrambest.ddns.net/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/kittygrambest.ddns.net/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+}
+server {
+    if ($host = kittygrambest.ddns.net) {
+        return 301 https://$host$request_uri;
+    }
+
+    listen 80;
+    server_name 51.250.16.6 kittygrambest.ddns.net;
+    return 404;
+}
+
+server {
+    if ($host = kittygrambest.ddns.net) {
+        return 301 https://$host$request_uri;
+    }
+
+    server_name kittygrambest.ddns.net;
+    listen 80;
+    return 404; # managed by Certbot
+}
