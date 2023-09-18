@@ -1,0 +1,5 @@
+IP: 51.250.16.6;
+name_taski: https://taskibest.webhop.me/;
+name_kittygram: https://kittygrambest.ddns.net/;
+login: AlexKor;
+password: Alex1997;
